@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>WWW文档设计</title>
     <audio autoplay loop><source src="https://zl2981487115.github.io/zl01-one/Counter.mp3" type="audio/mpeg"></audio> 
+    <script> function returnToPage() {window.top.close();}</script>
     <style>  
       body {
         background-image:url("https://img.zcool.cn/community/01fb495d610da6a8012187f428141d.jpg@1280w_1l_2o_100sh.jpg");
@@ -31,9 +32,9 @@
     </div>
     <div>
      <p style="
-max-width:700px;
-margin:30px auto;
-padding:10px;
+      max-width:700px;
+      margin:30px auto;
+      padding:10px;
       line-height=1;"><a href="https://zl2981487115.github.io/zl01-one/xiaoxue.html">我的家乡</a></p>
      <p style="
       max-width:700px;
@@ -54,10 +55,8 @@ padding:10px;
    <div style="
     text-align:center;
     padding:40px;
-    font-size:50px
-    ">
-     <button id="exitButton"onclick="closeWindow();">退出</button>
-      <script> function closeWindow(){window.top.close();}</script>
+    font-size:50px">
+    <button id="returnButton"onclick="returnToPage()">返回</button>
    </div> 
  </body>
 </html>
