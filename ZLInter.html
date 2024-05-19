@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>WWW文档设计</title>
     <audio autoplay loop><source src="https://zl2981487115.github.io/zl01-one/Counter.mp3" type="audio/mpeg"></audio> 
-    <style>  
+    <script>function returnToPage() {window.location.href='https://www.baidu.com/';}</script>
+    <style> 
+	    .footer{
+      position:absolute;
+      bottom:0;
+      width:100%;
+      }
       body {
         background-image:url("https://img.zcool.cn/community/01fb495d610da6a8012187f428141d.jpg@1280w_1l_2o_100sh.jpg");
         background-size:cover;
@@ -51,12 +57,9 @@
       padding:15px;
       line-height=1.7;"><a href="https://zl2981487115.github.io/zl01-one/daxue.html">我的大学生活</a></p>
    </div>
-   <div style="
-    text-align:center;
-    padding:40px;
-    font-size:50px">
-    <button id="closeButton"onclick="closeWindow()">退出</button>
-    <script> function closeWindow() {window.top.close();}</script>
-   </div> 
+    <div class="footer"
+         style="text-align:center">
+    <button id="returnButton"onclick="returnToPage()">返回</button>
+    </div>
  </body>
 </html>
