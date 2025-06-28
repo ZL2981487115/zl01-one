@@ -1,47 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-     <script>function returnToPage() {window.location.href='https://www.baidu.com/';}</script>
-    <title>www文档设计</title>
-    <style>  
-      body {
-        background-image:url("https://youimg1.c-ctrip.com/target/10070n000000eseq9B68E.jpg");
-        background-size:2000px;
-        background-position:center;
-        background-repeat:no-repeat;
+<html>
+<head>
+    <title>樱花飞舞效果</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ffcce6, #ffb3d9);
+            height: 100vh;
         }
-      .footer{
-      position:absolute;
-      bottom:0;
-      width:100%;
-      }
-      a{
-        color:#FFCCCC;
-       }
+        
+        .sakura {
+            position: absolute;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2M15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8M8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,8.7 7.7,8 8.5,8M12,11C13.1,11 14,11.9 14,13C14,14.1 13.1,15 12,15C10.9,15 10,14.1 10,13C10,11.9 10.9,11 12,11M19,17V19H5V17C5,14.8 8.1,13 12,13C15.9,13 19,14.8 19,17Z" /></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 25px;
+            height: 25px;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div><p style="font-size:50px;text-align:center;color:white;">www文档设计</p></div>
-    <div style="text-align:center;color:white;">
-         <p>姓名:张亮</p>
-         <p>班级:自动化2103</p>
-         <p>学号:21811128</p>
-    </div>
-    <div>
-        <p style="
-      text-align:center;
-      max-width:700px;
-      margin:40px auto;
-      padding:10px;
-      line-height:1;">
-      <a href="https://zl2981487115.github.io/zl01-one/ZLInter.html">点击进入我的生活经历</a>
-      </p>
-      <p class="footer"
-         style="text-align:center">
-    <button id="returnButton"onclick="returnToPage()">--退出--</button>
-    </p>
-    </div>
-  </body>
+</head>
+<body>
+    <script>
+        // 创建樱花
+        function createSakura() {
+            const sakura = document.createElement('div');
+            sakura.className = 'sakura';
+            
+            // 随机位置
+            const startX = Math.random() * window.innerWidth;
+            const startY = -30;
+            
+            // 随机大小
+            const size = Math.random() * 15 + 10;
+            
+            // 随机动画时长
+            const duration = Math.random() * 10 + 5;
+            
+            // 随机延迟
+            const delay = Math.random() * 5;
+            
+            // 随机透明度
+            const opacity = Math.random() * 0.5 + 0.5;
+            
+            // 应用样式
+            sakura.style.left = startX + 'px';
+            sakura.style.top = startY + 'px';
+            sakura.style.width = size + 'px';
+            sakura.style.height = size + 'px';
+            sakura.style.animationDuration = duration + 's';
+            sakura.style.animationDelay = delay + 's';
+            sakura.style.opacity = opacity;
+            
+            // 随机旋转方向
+            if (Math.random() > 0.5) {
+                sakura.style.animationName = 'fall-reverse';
+            }
+            
+            document.body.appendChild(sakura);
+            
+            // 樱花落地后移除
+            setTimeout(() => {
+                sakura.remove();
+            }, duration * 1000);
+        }
+        
+        // 添加反向动画
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fall-reverse {
+                to {
+                    transform: translateY(100vh) rotate(-360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 定期创建樱花
+        setInterval(createSakura, 300);
+        
+        // 初始创建一些樱花
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createSakura, i * 150);
+        }
+    </script>
+</body>
 </html>
