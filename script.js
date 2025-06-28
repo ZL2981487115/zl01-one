@@ -79,7 +79,7 @@ function render() {
 
 // 加载花瓣图片
 const sakuraImg = new Image();
-sakuraImg.src = './image/sakura.png';
+sakuraImg.src = 'sakura.png';
 // 等花瓣图片加载完毕，将数目为SAKURA_SUM的花瓣实例保存到数组中
 sakuraImg.addEventListener('load', () => {
     for (let i = 0; i < SAKURA_SUM; i++) {
