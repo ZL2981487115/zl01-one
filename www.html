@@ -1,77 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>樱花飘落效果</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            max-width: 800px;
+        }
+        
+        h1 {
+            color: #ff6b93;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #5a5a8c;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
         .sakura-leaf {
-            position: fixed;
+            position: absolute;
             top: -50px;
-            z-index: 9999;
+            z-index: 1;
             pointer-events: none;
-            animation: falling linear infinite;
+            animation: falling linear forwards;
+            opacity: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
         
         @keyframes falling {
             0% {
                 transform: translate(0, 0) rotate(0deg);
+                opacity: 0.8;
+            }
+            10% {
                 opacity: 1;
             }
-            70% {
+            90% {
                 opacity: 0.8;
             }
             100% {
-                transform: translate(var(--end-x), 100vh) rotate(360deg);
+                transform: translate(var(--end-x), 100vh) rotate(calc(var(--rotation) * 1deg));
                 opacity: 0;
             }
+        }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+        }
+        
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            color: #5a5a8c;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ffb6c1;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            color: #5a5a8c;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+        
+        .petal-count {
+            background: rgba(255, 182, 193, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            color: #5a5a8c;
+            font-size: 0.9rem;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>樱花飘落</h1>
+        <p class="subtitle">粉色樱花叶如雪花般飘落，大小不一，轻盈旋转，为您的屏幕带来春天的气息。调整下方滑块控制飘落密度和速度。</p >
+        
+        <div class="controls">
+            <div class="slider-container">
+                <label for="density">飘落密度: <span id="density-value">30</span> 片/秒</label>
+                <input type="range" id="density" min="5" max="100" value="30">
+            </div>
+            
+            <div class="slider-container">
+                <label for="speed">飘落速度: <span id="speed-value">中速</span></label>
+                <input type="range" id="speed" min="1" max="10" value="5">
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="petal-count">当前樱花叶: <span id="count">0</span></div>
+            <div>总生成樱花叶: <span id="total">0</span></div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        樱花飘落效果 | 自然动画模拟 | 爱心形状樱花叶
+    </div>
+    
     <script>
-        // 樱花叶形状SVG
+        // 樱花叶形状SVG（爱心形状）
         const leafSVG = `
-            <svg viewBox="0 0 20 20" width="100%" height="100%">
-                <path fill="#ffb6c1" d="M10,0 C12,5 15,8 20,10 C15,12 12,15 10,20 C8,15 5,12 0,10 C5,8 8,5 10,0 Z" 
-                      opacity="0.8" transform="rotate(45 10 10)"/>
+            <svg viewBox="0 0 24 24" width="100%" height="100%">
+                <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                      opacity="0.9" />
             </svg>`;
         
-        // 创建樱花叶
-        function createLeaf() {
-            const leaf = document.createElement('div');
-            leaf.className = 'sakura-leaf';
-            leaf.innerHTML = leafSVG;
-            
-            // 随机大小 (12-24px)
-            const size = Math.random() * 12 + 12;
-            leaf.style.width = `${size}px`;
-            leaf.style.height = `${size}px`;
-            
-            // 随机起始位置
-            leaf.style.left = `${Math.random() * 100}vw`;
-            
-            // 随机动画参数
-            const duration = Math.random() * 5 + 8; // 8-13秒
-            const delay = Math.random() * 5;
-            const endX = (Math.random() - 0.5) * 200; // 左右飘动幅度
-            
-            leaf.style.setProperty('--end-x', `${endX}px`);
-            leaf.style.animationDuration = `${duration}s`;
-            leaf.style.animationDelay = `${delay}s`;
-            
-            document.body.appendChild(leaf);
-            
-            // 动画结束后移除
-            setTimeout(() => {
-                leaf.remove();
-            }, (duration + delay) * 1000);
-        }
-        
-        // 初始创建30片叶子
-        for (let i = 0; i < 30; i++) {
-            setTimeout(createLeaf, Math.random() * 5000);
-        }
-        
-        // 每隔0.3秒创建一片新叶子
-        setInterval(createLeaf, 300);
-    </script>
-</body>
-</html>
+        // 樱花叶颜色变体
+        const colors = [
+            '#ffb6c1', // 浅粉色
+            '#ff9aaf', // 中等粉色
+            '#ff85a2', // 深粉色
+            '#ffb3c6', // 柔和
